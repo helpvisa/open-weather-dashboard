@@ -1,65 +1,50 @@
-/** variable declarations **/
-// array of cities, w lat and lon
-var cities = [
-    {
-        name: "chicago",
-        lat: 43.6532,
-        lon: -79.3832
-    },
-];
-
-
 /** query selectors on page **/
 var currentEl = $("#current-day-display");
 var futureEl = $("#future-forecast-display");
 
 
 /** main body of code **/
-fetchWeather("Chicago");
+fetchWeather("Germany");
 
 
 /** function delcarations **/
 // fetch from open weather api
 function fetchWeather(city) {
     city = city.toLowerCase(); // set string to lowercase for easier comparison
-    var foundCity = false;
-    var url = null;
-    // check for latitude and longitude of slected city
-    var lat = 0;
-    var lon = 0;
-    for (var i = 0; i < cities.length; i++) {
-        if (cities[i].name === city) {
-            // acquire latitude and longitude
-            lat = cities[i].lat;
-            lon = cities[i].lon;
-            foundCity = true;
-            // now construct url
-            url = "https://api.openweathermap.org/data/2.5/onecall?lat="
-                + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=00d7613313737e94ece2f321eed9e569";
-            break;
-        }
-    }
+    // check city call; use this to grab lat+lon for onecall (and 7 day forecast)
+    var url = "https://api.openweathermap.org/data/2.5/weather?q=" +
+        city + "&exclude=minutely,hourly&appid=00d7613313737e94ece2f321eed9e569";
 
-    // if city is found, perform api call
-    if (foundCity) {
-        fetch(url).then(function(response) {
-            if (response.ok) {
-                response.json().then(function(data) {
-                    console.log(data);
-                    displayWeather(data);
+    // perform api call
+    fetch(url).then(function(response) {
+        if (response.ok) {
+            response.json().then(function(coord) {
+                var onecallUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" +
+                    coord.coord.lat + "&lon=" + coord.coord.lon +
+                    "&exclude=minutely,hourly&appid=00d7613313737e94ece2f321eed9e569"
+                fetch(onecallUrl).then(function(response) {
+                    if (response.ok) {
+                        response.json().then(function(data) {
+                            console.log(data);
+                            displayWeather(data);
+                        });
+                    } else {
+                        alert("No weather data found.");
+                    }
+                })
+                .catch(function(error) {
+                    // catch network errors
+                    alert(error + " // Could not connect to Open Weather Map API.");
                 });
-            } else {
-                alert("No weather data found.");
-            }
-        })
-        .catch(function(error) {
-            // catch network errors
-            alert(error + " // Could not connect to Open Weather API.");
-        });
-    } else {
-        alert("Information for that city is not available.");
-        return;
-    }
+            });
+        } else {
+            alert("No weather data found.");
+        }
+    })
+    .catch(function(error) {
+        // catch network errors
+        alert(error + " // Could not connect to Open Weather Map API.");
+    });
 }
 
 // build cards with weather data
@@ -131,7 +116,7 @@ function displayWeather(weather) {
             pEl.addClass("card-text");
 
             if (i === 0) { // temp
-                pEl.text("Temperature: " + future[c].temp.day);
+                pEl.text("Temp: " + future[c].temp.day);
             } else if (i === 1) { // wind
                 pEl.text("Wind: " + future[c].wind_speed);
             } else if (i === 2) { // humidity
