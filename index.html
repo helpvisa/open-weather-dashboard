@@ -9,14 +9,21 @@
     <link rel="stylesheet" href="./assets/css/styles.css" /> <!-- custom stylesheet -->
     <title>Open Weather Dashboard</title>
 </head>
-<body>
+<body class="bg-secondary">
     <!-- city searcher -->
-    <section>
-
+    <section class="container-fluid d-flex bg-dark">
+        <div class="row my-4 mx-auto">
+            <!-- city search form -->
+            <form class="col text-light">
+                <label for="city-name">City: </label>
+                <input type="text" id="city-name" name="city-name">
+                <input type="submit" value="Submit">
+            </form>
+        </div>
     </section>
 
     <!-- weather display -->
-    <main>
+    <main class="container-fluid d-flex">
         <!-- past forecasts (up to 3) -->
         <div></div>
 
@@ -28,7 +35,11 @@
     </main>
 
     <!-- footer -->
-    <footer>©2022 Dan Brackenbury</footer>
+    <footer class="container-fluid d-flex bg-dark fixed-bottom">
+        <div class="row m-auto width-100">
+            <p class="col-12 m-auto text-light">©2022 Dan Brackenbury</p>
+        </div>
+    </footer>
 
     <!-- script load -->
     <!-- libraries -->
