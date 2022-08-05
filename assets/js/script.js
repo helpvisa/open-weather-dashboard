@@ -70,7 +70,7 @@ function fetchWeather(city) {
     city = city.toLowerCase(); // set string to lowercase for easier comparison
     // check city call; use this to grab lat+lon for onecall (and 7 day forecast)
     var url = "https://api.openweathermap.org/data/2.5/weather?q=" +
-        city + "&exclude=minutely,hourly&appid=00d7613313737e94ece2f321eed9e569";
+        city + "&appid=00d7613313737e94ece2f321eed9e569";
 
     // perform api call
     fetch(url).then(function(response) {
@@ -82,7 +82,8 @@ function fetchWeather(city) {
                 fetch(onecallUrl).then(function(response) { // nest additional api call
                     if (response.ok) {
                         response.json().then(function(data) {
-                            displayWeather(data);
+                            var cityName = coord.name;
+                            displayWeather(data, cityName);
                             updateHistory(city);
                         });
                     } else {
@@ -105,7 +106,7 @@ function fetchWeather(city) {
 }
 
 // build cards with weather data
-function displayWeather(weather) {
+function displayWeather(weather, cityName) {
     // clear elements
     currentEl.text("");
     futureEl.text("");
@@ -124,9 +125,9 @@ function displayWeather(weather) {
     // card header
     var cardHeaderEl = $("<h2>");
     cardHeaderEl.addClass("card-header");
-    var cityNameDisplay = weather.timezone.split("/")[1]
-    cityNameDisplay = cityNameDisplay.replaceAll("_", " ");
-    cardHeaderEl.text(cityNameDisplay);
+    //var cityNameDisplay = weather.timezone.split("/")[1]
+    //cityNameDisplay = cityNameDisplay.replaceAll("_", " ");
+    cardHeaderEl.text(cityName);
     cardEl.append(cardHeaderEl);
     // card body
     var cardBodyEl = $("<div>");
