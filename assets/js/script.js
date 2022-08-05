@@ -1,5 +1,5 @@
 /** global variable declarations **/
-var maxHistory = 6; // maximum # of cities allowed to appear in the search history
+var maxHistory = 5; // maximum # of cities allowed to appear in the search history
 var prevHist = []; // array of previously searched arrays
 var units = "metric"; // metric or imperial?
 
@@ -10,6 +10,7 @@ var futureEl = $("#future-forecast-display");
 var formEl = $("#city-form");
 var formTextEl = $("#city-name");
 var inputHistoryEl = $("#city-history");
+var unitEl = $("#units");
 
 
 /** main body of code **/
@@ -19,6 +20,19 @@ inputHistoryEl.on("click", ".btn", function(event) {
     var city = $(this).text();
     fetchWeather(city);
 })
+
+// change units
+unitEl.on("click", function() {
+    if (units === "metric") {
+        units = "imperial"
+    } else {
+        units = "metric"
+    }
+
+    unitEl.text(units);
+
+    fetchWeather(prevHist[prevHist.length - 1]);
+});
 
 
 /** function delcarations **/
