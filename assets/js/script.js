@@ -1,13 +1,70 @@
+/** global variable declarations **/
+var maxHistory = 6; // maximum # of cities allowed to appear in the search history
+var prevHist = []; // array of previously searched arrays
+
+
 /** query selectors on page **/
 var currentEl = $("#current-day-display");
 var futureEl = $("#future-forecast-display");
+var formEl = $("#city-form");
+var formTextEl = $("#city-name");
+var inputHistoryEl = $("#city-history");
 
 
 /** main body of code **/
-fetchWeather("Germany");
+// add listeners
+formEl.on("submit", formSubmissionHandler);
+inputHistoryEl.on("click", ".btn", function(event) {
+    var city = $(this).text();
+    fetchWeather(city);
+})
 
 
 /** function delcarations **/
+// handle city entry
+function formSubmissionHandler(event) {
+    event.preventDefault();
+
+    // get value
+    var city = formTextEl.val().trim();
+    formTextEl.val(""); // reset text field
+
+    fetchWeather(city);
+}
+
+// update clickable history display
+function updateHistory(city) {
+    // add this city to the search history, if it isn't already there...
+    var alreadyInHistory = false;
+    for (var i = 0; i < prevHist.length; i++) {
+        if (prevHist[i] == city) {
+            alreadyInHistory = true;
+            break;
+        }
+    }
+    if (!alreadyInHistory) {
+        prevHist.push(city);
+
+        // now shift off old searches if there are too many (oldest at beginning of array)
+        if (prevHist.length > maxHistory) {
+            var amountToPop = prevHist.length - maxHistory;
+            for (var i = 0; i < amountToPop; i++) {
+                prevHist.shift();
+            }
+        }
+
+        // clear history display
+        inputHistoryEl.text("");
+        // now re-create it from the local array
+        for (var i = prevHist.length - 1; i > -1; i--) {
+            var histEl = $("<div>");
+            histEl.addClass("btn btn-secondary my-auto mx-2");
+            histEl.text(prevHist[i]);
+            inputHistoryEl.append(histEl);
+        }
+    }
+}
+
 // fetch from open weather api
 function fetchWeather(city) {
     city = city.toLowerCase(); // set string to lowercase for easier comparison
@@ -18,15 +75,15 @@ function fetchWeather(city) {
     // perform api call
     fetch(url).then(function(response) {
         if (response.ok) {
-            response.json().then(function(coord) {
+            response.json().then(function(coord) { // use weather query to fetch lat+lon coords for onecall query
                 var onecallUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" +
                     coord.coord.lat + "&lon=" + coord.coord.lon +
                     "&exclude=minutely,hourly&appid=00d7613313737e94ece2f321eed9e569"
-                fetch(onecallUrl).then(function(response) {
+                fetch(onecallUrl).then(function(response) { // nest additional api call
                     if (response.ok) {
                         response.json().then(function(data) {
-                            console.log(data);
                             displayWeather(data);
+                            updateHistory(city);
                         });
                     } else {
                         alert("No weather data found.");
@@ -67,7 +124,9 @@ function displayWeather(weather) {
     // card header
     var cardHeaderEl = $("<h2>");
     cardHeaderEl.addClass("card-header");
-    cardHeaderEl.text(weather.timezone.split("/")[1]);
+    var cityNameDisplay = weather.timezone.split("/")[1]
+    cityNameDisplay = cityNameDisplay.replaceAll("_", " ");
+    cardHeaderEl.text(cityNameDisplay);
     cardEl.append(cardHeaderEl);
     // card body
     var cardBodyEl = $("<div>");

@@ -12,20 +12,20 @@
 </head>
 <body class="d-flex flex-column min-vh-100 bg-secondary">
     <!-- city searcher -->
-    <section class="container-fluid d-flex bg-dark">
-        <!-- city search form -->
-        <form class="form-group row text-light pt-1 pb-3 mx-auto">
-            <div class="col-12 d-flex">
-                <label for="city-name" class="mx-auto">City:</label>
+    <header class="container-fluid bg-dark">
+        <div class="row justify-content-around"> <!-- container for header -->
+            <!-- city search form -->
+            <form class="col-4 text-light" id="city-form">
+                <div class="d-flex flex-row">
+                    <label for="city-name" class="m-auto">City:</label>
+                    <input type="text" id="city-name" name="city-name" class="form-control m-2">
+                    <input type="submit" value="Submit" class="btn btn-danger m-2">
+                </div>
+            </form>
+            <div class="col-8 text-light d-flex flex-row justify-content-start" id="city-history">
             </div>
-            <div class="col-12 d-flex py-1">
-                <input type="text" id="city-name" name="city-name" class="form-control mx-auto">
-            </div>
-            <div class="col-12 d-flex pt-2">
-                <input type="submit" value="Submit" class="btn btn-secondary mx-auto">
-            </div>
-        </form>
-    </section>
+        </div>
+    </header>
 
     <!-- main info display -->
     <main class="container-fluid">
