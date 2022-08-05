@@ -1,6 +1,7 @@
 /** global variable declarations **/
 var maxHistory = 6; // maximum # of cities allowed to appear in the search history
 var prevHist = []; // array of previously searched arrays
+var units = "metric"; // metric or imperial?
 
 
 /** query selectors on page **/
@@ -78,13 +79,13 @@ function fetchWeather(city) {
             response.json().then(function(coord) { // use weather query to fetch lat+lon coords for onecall query
                 var onecallUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" +
                     coord.coord.lat + "&lon=" + coord.coord.lon +
-                    "&exclude=minutely,hourly&appid=00d7613313737e94ece2f321eed9e569"
+                    "&exclude=minutely,hourly&units=" + units + "&appid=00d7613313737e94ece2f321eed9e569"
                 fetch(onecallUrl).then(function(response) { // nest additional api call
                     if (response.ok) {
                         response.json().then(function(data) {
                             var cityName = coord.name;
                             displayWeather(data, cityName);
-                            updateHistory(city);
+                            updateHistory(cityName);
                         });
                     } else {
                         alert("No weather data found.");
@@ -139,9 +140,15 @@ function displayWeather(weather, cityName) {
         pEl.addClass("card-text");
 
         if (i === 0) { // temp
-            pEl.text("Temperature: " + current.temp);
+            if (units === "metric")
+                pEl.text("Temperature: " + current.temp + "°C");
+            else
+                pEl.text("Temperature: " + current.temp + "°F");
         } else if (i === 1) { // wind
-            pEl.text("Wind: " + current.wind_speed);
+            if (units === "metric")
+                pEl.text("Wind: " + current.wind_speed + "m/s");
+            else
+                pEl.text("Wind: " + current.wind_speed + "mph");
         } else if (i === 2) { // humidity
             pEl.text("Humidity: " + current.humidity + "%");
         } else if (i === 3) { // uv
@@ -176,9 +183,15 @@ function displayWeather(weather, cityName) {
             pEl.addClass("card-text");
 
             if (i === 0) { // temp
-                pEl.text("Temp: " + future[c].temp.day);
+                if (units === "metric")
+                    pEl.text("Temperature: " + future[c].temp.day + "°C");
+                else
+                    pEl.text("Temperature: " + future[c].temp.day + "°F");
             } else if (i === 1) { // wind
-                pEl.text("Wind: " + future[c].wind_speed);
+                if (units === "metric")
+                    pEl.text("Wind: " + future[c].wind_speed + "m/s");
+                else
+                    pEl.text("Wind: " + future[c].wind_speed + "mph");
             } else if (i === 2) { // humidity
                 pEl.text("Humidity: " + future[c].humidity + "%");
             }
