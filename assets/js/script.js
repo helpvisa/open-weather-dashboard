@@ -1,5 +1,5 @@
 /** global variable declarations **/
-var maxHistory = 5; // maximum # of cities allowed to appear in the search history
+var maxHistory = 10; // maximum # of cities allowed to appear in the search history
 var units = "metric"; // metric or imperial?
 var prevHist = null;
 
@@ -41,7 +41,8 @@ unitEl.on("click", function() {
 
     // get the name of the currently displayed city; if there is one, do a search
     var fetchString = $("#main-card").text();
-    if (fetchString)
+    console.log(fetchString);
+    if (fetchString) {
         // clear elements
         currentEl.text("");
         futureEl.text("");
@@ -50,6 +51,7 @@ unitEl.on("click", function() {
         currentEl.append(loadEl);
 
         fetchWeather(fetchString);
+    }
 });
 
 // load history
@@ -116,7 +118,7 @@ function updateHistory(city) {
     // now re-create it from the local array
     for (var i = prevHist.length - 1; i > -1; i--) {
         var histEl = $("<div>");
-        histEl.addClass("btn btn-secondary my-auto mx-2");
+        histEl.addClass("btn btn-secondary mx-1 mb-2");
         histEl.text(prevHist[i]);
         inputHistoryEl.append(histEl);
     }
@@ -206,7 +208,7 @@ function displayWeather(weather, cityName) {
     // 4 main body texts
     for (var i = 0; i < 4; i++) {
         var pEl = $("<p>");
-        pEl.addClass("card-text w-25 mx-auto");
+        pEl.addClass("card-text mx-auto");
 
         if (i === 0) { // temp
             if (units === "metric")
@@ -221,8 +223,8 @@ function displayWeather(weather, cityName) {
         } else if (i === 2) { // humidity
             pEl.text("Humidity: " + current.humidity + "%");
         } else if (i === 3) { // uv
-            pEl.text("UV Index: " + current.uvi);
-            pEl.addClass("border border-dark rounded")
+            pEl.text("UV: " + current.uvi);
+            pEl.addClass("border border-dark rounded w-25 p-2")
             if (current.uvi < 3) {
                 pEl.addClass("uv-low text-light");
             } else if (current.uvi < 6) {
@@ -244,7 +246,7 @@ function displayWeather(weather, cityName) {
     for (var c = 0; c < 5; c++) { // c for card; build 5!
         // card container
         var containerEl = $("<div>");
-        containerEl.addClass("col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4");
+        containerEl.addClass("col-12 col-md-6 col-lg-4 col-xxl-2 mb-4");
         // actual card
         var cardEl = $("<div>");
         cardEl.addClass("card bg-info");

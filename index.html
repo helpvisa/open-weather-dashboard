@@ -12,33 +12,44 @@
     <title>Open Weather Dashboard</title>
 </head>
 <body class="d-flex flex-column min-vh-100 bg-secondary">
-    <!-- city searcher -->
-    <header class="container-fluid bg-dark">
-        <div class="row justify-content-around"> <!-- container for header -->
-            <!-- city search form -->
-            <form class="col-12 col-md-4 text-light" id="city-form">
-                <div class="d-flex flex-row">
-                    <label for="city-name" class="m-auto">City:</label>
-                    <input type="text" id="city-name" name="city-name" class="form-control m-2">
-                    <input type="submit" value="Submit" class="btn btn-danger m-2">
+    <!-- website description -->
+    <hero class="jumbotron d-flex justify-content-center bg-primary">
+        <h1 class="mx-auto">Open Weather Dashboard</h1>
+    </hero>
+
+    <!-- body section divider -->
+    <div class="container-fluid">
+        <div class="row justify-content-start">
+            <!-- city searcher -->
+            <header class="col-12 col-lg-4">
+                <div class="row  bg-dark rounded">
+                    <!-- container for header -->
+                    <!-- city search form -->
+                    <form class="col-10 mx-auto" id="city-form">
+                        <div class="d-flex flex-column">
+                            <label for="city-name" class="text-light mx-auto mt-2">Enter City:</label>
+                            <input type="text" id="city-name" name="city-name" class="form-control my-2 mx-auto">
+                            <input type="submit" value="Submit" class="btn btn-danger mx-auto mb-2">
+                        </div>
+                    </form>
+                    <div class="col-8 mx-auto d-flex flex-column" id="city-history">
+                    </div>
+                    <button class="col-12 mx-auto mt-auto btn btn-warning h-25" id="units">metric</button>
                 </div>
-            </form>
-            <div class="col-12 col-md-6 text-light d-flex flex-row justify-content-around mb-2" id="city-history">
-            </div>
-            <button class="col-4 col-sm-2 col-lg-1 btn btn-warning m-lg-2 mb-2" id="units">metric</button>
+            </header>
+    
+            <!-- main info display -->
+            <main class="col-12 col-lg-8">
+                <!-- city info display -->
+                <section class="row d-flex justify-content-around" id="current-day-display">
+                </section>
+    
+                <!-- weather display -->
+                <section class="row d-flex justify-content-around mt-2" id="future-forecast-display">
+                </section>
+            </main>
         </div>
-    </header>
-
-    <!-- main info display -->
-    <main class="container-fluid">
-        <!-- city info display -->
-        <section class="row d-flex justify-content-around" id="current-day-display">
-        </section>
-
-        <!-- weather display -->
-        <section class="row d-flex justify-content-around mt-2" id="future-forecast-display">
-        </section>
-    </main>
+    </div>
 
     <!-- footer -->
     <footer class="container-fluid d-flex bg-dark mt-auto">

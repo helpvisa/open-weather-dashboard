@@ -14,3 +14,8 @@
 .uv-extreme {
     background-color: violet;
 }
+
+/* sidebar styling */
+.sidebar-height {
+    min-height: 88.78vh;
+}
