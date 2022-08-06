@@ -18,6 +18,14 @@ var unitEl = $("#units");
 formEl.on("submit", formSubmissionHandler);
 inputHistoryEl.on("click", ".btn", function(event) {
     var city = $(this).text();
+
+    // clear elements
+    currentEl.text("");
+    futureEl.text("");
+
+    var loadEl = loadCard();
+    currentEl.append(loadEl);
+
     fetchWeather(city);
 })
 
@@ -34,6 +42,13 @@ unitEl.on("click", function() {
     // get the name of the currently displayed city; if there is one, do a search
     var fetchString = $("#main-card").text();
     if (fetchString)
+        // clear elements
+        currentEl.text("");
+        futureEl.text("");
+
+        var loadEl = loadCard();
+        currentEl.append(loadEl);
+
         fetchWeather(fetchString);
 });
 
@@ -53,6 +68,13 @@ function formSubmissionHandler(event) {
     // get value
     var city = formTextEl.val().trim();
     formTextEl.val(""); // reset text field
+
+    // clear elements
+    currentEl.text("");
+    futureEl.text("");
+
+    var loadEl = loadCard();
+    currentEl.append(loadEl);
 
     fetchWeather(city);
 }
@@ -122,19 +144,31 @@ function fetchWeather(city) {
                             updateHistory(cityName);
                         });
                     } else {
+                        // clear elements
+                        currentEl.text("");
+                        futureEl.text("");
                         alert("No weather data found.");
                     }
                 })
                 .catch(function(error) {
+                    // clear elements
+                    currentEl.text("");
+                    futureEl.text("");
                     // catch network errors
                     alert(error + " // Could not connect to Open Weather Map API.");
                 });
             });
         } else {
+            // clear elements
+            currentEl.text("");
+            futureEl.text("");
             alert("No weather data found.");
         }
     })
     .catch(function(error) {
+        // clear elements
+        currentEl.text("");
+        futureEl.text("");
         // catch network errors
         alert(error + " // Could not connect to Open Weather Map API.");
     });
@@ -249,4 +283,16 @@ function appendWeatherIcon(w) {
     weatherEl.addClass("m-auto");
 
     return weatherEl
+}
+
+function loadCard() {
+    var containerEl = $("<div>");
+    containerEl.addClass("col-12 m-auto");
+    // actual card
+    var cardEl = $("<div>");
+    cardEl.addClass("card text-center bg-danger");
+    cardEl.text("Loading weather...");
+    containerEl.append(cardEl);
+
+    return containerEl;
 }
