@@ -1,0 +1,16 @@
+/* UV colours */
+.uv-low {
+    background-color: green;
+}
+.uv-moderate {
+    background-color: yellow;
+}
+.uv-high {
+    background-color: orange;
+}
+.uv-veryhigh {
+    background-color: red;
+}
+.uv-extreme {
+    background-color: violet;
+}

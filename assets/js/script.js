@@ -206,7 +206,7 @@ function displayWeather(weather, cityName) {
     // 4 main body texts
     for (var i = 0; i < 4; i++) {
         var pEl = $("<p>");
-        pEl.addClass("card-text");
+        pEl.addClass("card-text w-25 mx-auto");
 
         if (i === 0) { // temp
             if (units === "metric")
@@ -222,6 +222,18 @@ function displayWeather(weather, cityName) {
             pEl.text("Humidity: " + current.humidity + "%");
         } else if (i === 3) { // uv
             pEl.text("UV Index: " + current.uvi);
+            pEl.addClass("border border-dark rounded")
+            if (current.uvi < 3) {
+                pEl.addClass("uv-low text-light");
+            } else if (current.uvi < 6) {
+                pEl.addClass("uv-moderate");
+            } else if (current.uvi < 8) {
+                pEl.addClass("uv-high");
+            } else if (current.uvi < 11) {
+                pEl.addClass("uv-veryhigh text-light");
+            } else {
+                pEl.addClass("uv-extreme text-light");
+            }
         }
         cardBodyEl.append(pEl)
     }
