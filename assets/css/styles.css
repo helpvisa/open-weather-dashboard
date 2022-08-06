@@ -1,3 +1,9 @@
+/* custom background colours */
+.jumbo-bg {
+    background: linear-gradient(90deg, rgba(0,255,141,1) 0%, rgba(255,248,0,1) 48%, rgba(252,115,69,1) 100%);
+}
+
+
 /* UV colours */
 .uv-low {
     background-color: green;
@@ -14,6 +20,7 @@
 .uv-extreme {
     background-color: violet;
 }
+
 
 /* sidebar styling */
 .sidebar-height {

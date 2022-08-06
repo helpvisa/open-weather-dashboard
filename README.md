@@ -1,5 +1,10 @@
-# open-weather-dashboard
+# Open Weather Dashboard
+## Dan Brackenbury
+### Assembled with HTML / CSS / JavaScript, using Bootstrap, JQuery, and Moment.JS libraries.
 
-A dashboard to check the weather across the world.
+A dashboard to check the weather across the world; enter a city and see the current weather, as well as a 5-day forecast.
+Stores up to 12 cities in a local search history.
 
-Assembled with HTML / CSS / JavaScript, using Bootstrap and JQuery libraries.
+Uses the Open Weather Map API to get forecasts the world over!
+
+![Preview of Site](./assets/images/preview.jpg)

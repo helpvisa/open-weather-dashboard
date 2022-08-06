@@ -1,7 +1,7 @@
 /** global variable declarations **/
-var maxHistory = 10; // maximum # of cities allowed to appear in the search history
+var maxHistory = 12; // maximum # of cities allowed to appear in the search history
 var units = "metric"; // metric or imperial?
-var prevHist = null;
+var prevHist = null; // establish search history (null to begin, before load)
 
 
 /** query selectors on page **/
@@ -40,8 +40,7 @@ unitEl.on("click", function() {
     unitEl.text(units);
 
     // get the name of the currently displayed city; if there is one, do a search
-    var fetchString = $("#main-card").text();
-    console.log(fetchString);
+    var fetchString = $("#main-card").text().split("-")[1];
     if (fetchString) {
         // clear elements
         currentEl.text("");
@@ -197,9 +196,17 @@ function displayWeather(weather, cityName) {
     var cardHeaderEl = $("<h2>");
     cardHeaderEl.addClass("card-header");
     cardHeaderEl.attr("id", "main-card");
-    cardHeaderEl.text(cityName);
-    var weatherIconEl = appendWeatherIcon(current.weather[0].icon);
+    // current weather icon
+    var weatherIconEl = appendWeatherIcon(current.weather[0].icon, "@2x");
     cardHeaderEl.append(weatherIconEl);
+    // city display
+    var nameEl = $("<p>");
+    nameEl.text("-" + cityName + "-"); // add dashes for unit conversion text element fetch split... but it 'looks nice' so it's fine ;)
+    cardHeaderEl.append(nameEl);
+    // date display
+    var dateEl = $("<p>");
+    dateEl.text(moment().format("MM/D/YYYY"));
+    cardHeaderEl.append(dateEl);
     cardEl.append(cardHeaderEl);
     // card body
     var cardBodyEl = $("<div>");
@@ -254,8 +261,9 @@ function displayWeather(weather, cityName) {
         // card header
         var cardHeaderEl = $("<h5>");
         cardHeaderEl.addClass("card-header");
-        cardHeaderEl.text("Day " + (c + 1));
-        var weatherIconEl = appendWeatherIcon(future[c].weather[0].icon);
+        var date = moment().add(c + 1, "days");
+        cardHeaderEl.text(date.format("MM/D/YYYY"));
+        var weatherIconEl = appendWeatherIcon(future[c].weather[0].icon, "");
         cardHeaderEl.append(weatherIconEl);
 
         cardEl.append(cardHeaderEl);
@@ -288,11 +296,11 @@ function displayWeather(weather, cityName) {
     }
 }
 
-function appendWeatherIcon(w) {
+function appendWeatherIcon(w, size) {
     // create the icon element
     var weatherEl = $("<img>");
     // fetch from open weather map image url template
-    var imgUrl = "http://openweathermap.org/img/wn/" + w + ".png";
+    var imgUrl = "http://openweathermap.org/img/wn/" + w + size + ".png";
     weatherEl.attr("src", imgUrl); // set img source
     weatherEl.addClass("m-auto");
 
