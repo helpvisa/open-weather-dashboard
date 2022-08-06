@@ -18,6 +18,7 @@ var unitEl = $("#units");
 formEl.on("submit", formSubmissionHandler);
 inputHistoryEl.on("click", ".btn", function(event) {
     var city = $(this).text();
+    city = city.replaceAll(" ", "+"); // replace spaces with space code character
 
     // clear elements
     currentEl.text("");
@@ -41,6 +42,7 @@ unitEl.on("click", function() {
 
     // get the name of the currently displayed city; if there is one, do a search
     var fetchString = $("#main-card").text().split("-")[1];
+    fetchString = fetchString.replaceAll(" ", "+"); // replace spaces with space code character
     if (fetchString) {
         // clear elements
         currentEl.text("");
