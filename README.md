@@ -7,4 +7,6 @@ Stores up to 12 cities in a local search history.
 
 Uses the Open Weather Map API to get forecasts the world over!
 
+Live deployment available at: https://helpvisa.github.io/open-weather-dashboard/
+
 ![Preview of Site](./assets/images/preview.jpg)
