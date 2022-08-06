@@ -140,9 +140,9 @@ function displayWeather(weather, cityName) {
     // card header
     var cardHeaderEl = $("<h2>");
     cardHeaderEl.addClass("card-header");
-    //var cityNameDisplay = weather.timezone.split("/")[1]
-    //cityNameDisplay = cityNameDisplay.replaceAll("_", " ");
     cardHeaderEl.text(cityName);
+    var weatherIconEl = appendWeatherIcon(current.weather[0].icon);
+    cardHeaderEl.append(weatherIconEl);
     cardEl.append(cardHeaderEl);
     // card body
     var cardBodyEl = $("<div>");
@@ -177,7 +177,7 @@ function displayWeather(weather, cityName) {
     for (var c = 0; c < 5; c++) { // c for card; build 5!
         // card container
         var containerEl = $("<div>");
-        containerEl.addClass("col-sm-12 col-lg-2");
+        containerEl.addClass("col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4");
         // actual card
         var cardEl = $("<div>");
         cardEl.addClass("card bg-info");
@@ -186,6 +186,9 @@ function displayWeather(weather, cityName) {
         var cardHeaderEl = $("<h5>");
         cardHeaderEl.addClass("card-header");
         cardHeaderEl.text("Day " + (c + 1));
+        var weatherIconEl = appendWeatherIcon(future[c].weather[0].icon);
+        cardHeaderEl.append(weatherIconEl);
+
         cardEl.append(cardHeaderEl);
         // card body
         var cardBodyEl = $("<div>");
@@ -198,9 +201,9 @@ function displayWeather(weather, cityName) {
 
             if (i === 0) { // temp
                 if (units === "metric")
-                    pEl.text("Temperature: " + future[c].temp.day + "°C");
+                    pEl.text("Temp: " + future[c].temp.day + "°C");
                 else
-                    pEl.text("Temperature: " + future[c].temp.day + "°F");
+                    pEl.text("Temp: " + future[c].temp.day + "°F");
             } else if (i === 1) { // wind
                 if (units === "metric")
                     pEl.text("Wind: " + future[c].wind_speed + "m/s");
@@ -214,4 +217,15 @@ function displayWeather(weather, cityName) {
         // append to container
         futureEl.append(containerEl);
     }
+}
+
+function appendWeatherIcon(w) {
+    // create the icon element
+    var weatherEl = $("<img>");
+    // fetch from open weather map image url template
+    var imgUrl = "http://openweathermap.org/img/wn/" + w + ".png";
+    weatherEl.attr("src", imgUrl); // set img source
+    weatherEl.addClass("m-auto");
+
+    return weatherEl
 }
