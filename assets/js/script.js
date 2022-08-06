@@ -68,6 +68,8 @@ function formSubmissionHandler(event) {
 
     // get value
     var city = formTextEl.val().trim();
+    city = city.replaceAll(" ", "+"); // replace spaces with space code character
+    console.log(city);
     formTextEl.val(""); // reset text field
 
     // clear elements
