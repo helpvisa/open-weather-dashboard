@@ -1,7 +1,7 @@
 /** global variable declarations **/
 var maxHistory = 5; // maximum # of cities allowed to appear in the search history
-var prevHist = []; // array of previously searched arrays
 var units = "metric"; // metric or imperial?
+var prevHist = null;
 
 
 /** query selectors on page **/
@@ -31,8 +31,18 @@ unitEl.on("click", function() {
 
     unitEl.text(units);
 
-    fetchWeather(prevHist[prevHist.length - 1]);
+    // get the name of the currently displayed city; if there is one, do a search
+    var fetchString = $("#main-card").text();
+    if (fetchString)
+        fetchWeather(fetchString);
 });
+
+// load history
+prevHist = JSON.parse(localStorage.getItem("history"));
+if (!prevHist) {
+    prevHist = []; // array of previously searched arrays
+}
+updateHistory(null);
 
 
 /** function delcarations **/
@@ -51,12 +61,19 @@ function formSubmissionHandler(event) {
 function updateHistory(city) {
     // add this city to the search history, if it isn't already there...
     var alreadyInHistory = false;
-    for (var i = 0; i < prevHist.length; i++) {
-        if (prevHist[i] == city) {
-            alreadyInHistory = true;
-            break;
+
+    if (city === null) { // no city presented to function
+        alreadyInHistory = true; // so skip the for loop and go straight to updating the display
+    }
+    else {
+        for (var i = 0; i < prevHist.length; i++) {
+            if (prevHist[i] == city) {
+                alreadyInHistory = true;
+                break;
+            }
         }
     }
+
     if (!alreadyInHistory) {
         prevHist.push(city);
 
@@ -68,15 +85,18 @@ function updateHistory(city) {
             }
         }
 
-        // clear history display
-        inputHistoryEl.text("");
-        // now re-create it from the local array
-        for (var i = prevHist.length - 1; i > -1; i--) {
-            var histEl = $("<div>");
-            histEl.addClass("btn btn-secondary my-auto mx-2");
-            histEl.text(prevHist[i]);
-            inputHistoryEl.append(histEl);
-        }
+        // save this in localStorage
+        localStorage.setItem("history", JSON.stringify(prevHist));
+    }
+
+    // clear history display
+    inputHistoryEl.text("");
+    // now re-create it from the local array
+    for (var i = prevHist.length - 1; i > -1; i--) {
+        var histEl = $("<div>");
+        histEl.addClass("btn btn-secondary my-auto mx-2");
+        histEl.text(prevHist[i]);
+        inputHistoryEl.append(histEl);
     }
 }
 
@@ -140,6 +160,7 @@ function displayWeather(weather, cityName) {
     // card header
     var cardHeaderEl = $("<h2>");
     cardHeaderEl.addClass("card-header");
+    cardHeaderEl.attr("id", "main-card");
     cardHeaderEl.text(cityName);
     var weatherIconEl = appendWeatherIcon(current.weather[0].icon);
     cardHeaderEl.append(weatherIconEl);
